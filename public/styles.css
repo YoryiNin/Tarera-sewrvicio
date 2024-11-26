@@ -1,0 +1,100 @@
+/* Estilo general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F3F6F4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #2C6B2F; /* Verde oscuro */
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+}
+
+section {
+    width: 45%;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #2C6B2F; /* Verde oscuro */
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    max-height: 300px; /* Altura máxima para la lista */
+    overflow-y: auto; /* Activa el scroll vertical */
+}
+
+li {
+    background-color: #e0f7e9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #2C6B2F;
+    border-radius: 5px;
+    width: 100%; /* Establecer un ancho del 100% */
+}
+
+/* Barra de búsqueda */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #2C6B2F;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px;
+    background-color: #2C6B2F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3A8E43;
+}
+
+/* Estilo para el mensaje de confirmación */
+#mensaje {
+    margin-top: 15px;
+    color: #2C6B2F;
+    font-weight: bold;
+}
