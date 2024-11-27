@@ -2,10 +2,20 @@
 async function obtenerContactos() {
     try {
         const response = await fetch('/contactos');
-        const contactos = await response.json();
+        const datos = await response.json();
         const listaContactos = document.getElementById('contactos-list');
         listaContactos.innerHTML = ''; // Limpiar la lista antes de mostrar nuevos
 
+        // Verifica si la respuesta contiene documentos de Firestore
+        const contactos = datos.map(doc => {
+            return {
+                nombre: doc.nombre,
+                telefono: doc.telefono,
+                correo: doc.correo
+            };
+        });
+
+        // Mostrar los contactos en la lista
         contactos.forEach(contacto => {
             const li = document.createElement('li');
             li.textContent = `${contacto.nombre} - ${contacto.telefono} - ${contacto.correo}`;
@@ -16,6 +26,8 @@ async function obtenerContactos() {
         window.contactos = contactos;
     } catch (error) {
         console.error('Error al obtener los contactos:', error);
+        // Mostrar mensaje de error
+        mostrarMensajeError('No se pudieron cargar los contactos.');
     }
 }
 
@@ -41,17 +53,31 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
         const data = await response.json();
         console.log(data);
 
-        // Mostrar mensaje de éxito
-        const mensaje = document.getElementById('mensaje');
-        mensaje.textContent = "Contacto agregado con éxito!";
-        mensaje.style.color = 'green';
+        if (response.ok) {
+            // Mostrar mensaje de éxito
+            const mensaje = document.getElementById('mensaje');
+            mensaje.textContent = "Contacto agregado con éxito!";
+            mensaje.style.color = 'green';
 
-        // Limpiar los campos de formulario
-        document.getElementById('contact-form').reset();
+            // Limpiar los campos de formulario
+            document.getElementById('contact-form').reset();
 
-        obtenerContactos(); // Recargar la lista después de agregar
+            // Agregar el contacto directamente en la lista de la página
+            const listaContactos = document.getElementById('contactos-list');
+            const li = document.createElement('li');
+            li.textContent = `${data.nombre} - ${data.telefono} - ${data.correo}`;
+            listaContactos.appendChild(li);
+
+            // Opcional: Recargar todos los contactos para estar seguro
+            // obtenerContactos(); // Descomentar si prefieres hacer una nueva llamada a la API
+        } else {
+            mostrarMensajeError(data.error || 'No se pudo agregar el contacto.');
+        }
+
     } catch (error) {
         console.error('Error al agregar el contacto:', error);
+        // Mostrar mensaje de error
+        mostrarMensajeError('No se pudo agregar el contacto.');
     }
 });
 
@@ -62,7 +88,8 @@ document.getElementById('search').addEventListener('input', () => {
     // Filtrar los contactos en base al término de búsqueda
     const contactosFiltrados = window.contactos.filter(contacto => {
         return contacto.nombre.toLowerCase().includes(query) || 
-               contacto.telefono.includes(query);
+               contacto.telefono.includes(query) ||
+               contacto.correo.toLowerCase().includes(query);  // También filtra por correo
     });
 
     mostrarContactos(contactosFiltrados); // Mostrar los contactos filtrados
@@ -78,6 +105,13 @@ function mostrarContactos(contactos) {
         li.textContent = `${contacto.nombre} - ${contacto.telefono} - ${contacto.correo}`;
         listaContactos.appendChild(li);
     });
+}
+
+// Función para mostrar mensajes de error en la interfaz
+function mostrarMensajeError(mensaje) {
+    const mensajeError = document.getElementById('mensaje');
+    mensajeError.textContent = mensaje;
+    mensajeError.style.color = 'red';
 }
 
 // Cargar los contactos al cargar la página
